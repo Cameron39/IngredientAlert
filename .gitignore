@@ -40,5 +40,4 @@ captures/
 *.jks
 
 #Properties
-/app/src/main/java/com/cpitcel/ingredientalert/theproperties.properties
 /gradle.properties
