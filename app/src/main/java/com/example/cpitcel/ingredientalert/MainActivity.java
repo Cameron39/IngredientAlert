@@ -188,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
         //URL = P1 + Barcode + P3 + APPID + P5 + API_KEY
         private final static String URLP1 = "https://api.nutritionix.com/v1_1/item?upc=";
         private final static String URLP3 = "&appId=";
-        private final static String theAppID = "";
+        private final static String theAppID = BuildConfig.theAppID;
         private final static String URLP5 = "&appKey=";
-        private final static String theAPI_KEY = "";
+        private final static String theAPI_KEY = BuildConfig.theAPIKey;
         //private final static String URL1P1 = "http://api.nal.usda.gov/ndb/search/?format=json&q=";
         //private final static String URL1P3 = "&max=1&offset=0&api_key=";
         //private final static String URL2P1 = "https://api.nal.usda.gov/ndb/reports/?ndbno=";
