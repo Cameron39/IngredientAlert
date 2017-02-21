@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void doScanSearch(View view){
         doScan(view);
-        //doSearch();
+        doSearch(view);
     }
 
     @Override
