@@ -20,6 +20,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import org.json.*;
 
 import java.io.BufferedReader;
@@ -29,18 +33,20 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+//import com.google.android.gms.vision.Frame;
+//import com.google.android.gms.vision.barcode.Barcode;
+//import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 public class MainActivity extends AppCompatActivity {
     private TextView scanResult;
     private TextView searchResult;
-    private BarcodeDetector detector;
+   // private BarcodeDetector detector;
     private Uri imgDetect;
     private String theUPC = "";
-    private static final int Req_Write_Permissions = 20;
-    private static final int Req_Take_Photo = 10;
+    private IntentIntegrator integrator;
+    private static final String TAG = "Main";
+    //private static final int Req_Write_Permissions = 20;
+    //private static final int Req_Take_Photo = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,21 +63,18 @@ public class MainActivity extends AppCompatActivity {
             scanResult.setText(savedInstanceState.getString("result"));
         }
 
-        ScanButton.setOnClickListener(new View.OnClickListener(){
-            @Override
+        /**ScanButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Req_Write_Permissions);
             }
-
         });
-        /**
+
          SearchButton.setOnClickListener(new View.OnClickListener(){
-        @Override
         public void onClick(View v) {
         getSearch(v);
         }
-        });**/
+        });
 
         detector = new BarcodeDetector.Builder(getApplicationContext())
                 .setBarcodeFormats(Barcode.UPC_A | Barcode.UPC_E)
@@ -79,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
         if (!detector.isOperational()) {
             scanResult.setText("Could not setup detector");
             return;
-        }
+        }*/
     }
-
+/**
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (imgDetect != null) {
@@ -174,6 +177,53 @@ public class MainActivity extends AppCompatActivity {
         GetAPIData apiData = new GetAPIData(newUPC);
         apiData.execute();
         Log.i("MA.getSearchandResults", "Done with " + newUPC);
+    }
+ **/
+
+    public void doScanSearch(View view) {
+        Log.i(TAG + "doScanSearch", "starting");
+        String newUPC = "";
+        //ONION UPC:    041500220208 - french's french fried onions
+        //NO ONION UPC: 070640034086
+        //Cherry Coke: 49000036756
+
+        //TODO: initialize and setup the barcode scanner
+        scanResult.setText("Starting Scan");
+        integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setPrompt("Scan a Barcode");
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(false);
+        integrator.setCameraId(0);
+        integrator.initiateScan();
+
+        //Lookup the Data part
+        Log.i(TAG + "doScanSearch", "Done scan, start search");
+        GetAPIData apiData = new GetAPIData(newUPC);
+        apiData.execute();
+        Log.i(TAG + "doScanSearch", "Done with " + newUPC);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                scanResult.setText("Cancelled");
+                Log.i(TAG, "Cancelled");
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                scanResult.setText(result.getContents().toString());
+                Log.i(TAG, "Scan Results: " + result.getContents().toString());
+                theUPC = result.getContents().toString();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.i(TAG, "No Scan Results");
+            Toast.makeText(this, "No Results", Toast.LENGTH_LONG).show();
+        }
     }
 
     private class GetAPIData extends AsyncTask<Void, Void, String> {

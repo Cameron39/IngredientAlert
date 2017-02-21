@@ -10,24 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.cpitcel.ingredientalert.MainActivity">
 
-    <TextView
-        android:text="Future Scan Result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:id="@+id/result"
-        android:layout_below="@+id/Header"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Scan and Search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scanButton"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/Header"
-        android:layout_marginBottom="26dp" />
-
     <Button
         android:text="Search"
         android:layout_width="wrap_content"
@@ -64,5 +46,23 @@
         android:layout_marginTop="17dp"
         android:id="@+id/HeaderSearchResult"
         android:layout_below="@+id/result"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Scan and Search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scanButton"
+        android:layout_marginBottom="26dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Future Scan Result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/result"
+        android:layout_below="@+id/Header"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
