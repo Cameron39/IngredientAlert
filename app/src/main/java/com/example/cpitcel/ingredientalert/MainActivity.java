@@ -205,7 +205,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doSearch(View view) {
-        theUPC = scanResult.getText().toString();
+        //theUPC = scanResult.getText().toString();
+        theUPC = "49000036756";
         if (theUPC == null || theUPC == "") {
             searchResult.setText("No UPC to Lookup >" + theUPC + "<");
         } else {
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         private String theBarcode = "";
         //private String theNDBNO = "";
         private String theNutrList = "";
+        private String theItemName = "";
         private String deathBy = "ONION";
         private boolean hasDeath = false;
         private boolean hasNoData = false;
@@ -344,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Execution Ended with result: " + response.toString());
             theResult = response.toString();
             searchResult.setText(response.toString());
+            scanResult.setText(theItemName);
 
         }
 
@@ -396,6 +399,9 @@ public class MainActivity extends AppCompatActivity {
                 String strNutrList = jsonObject.getString("nf_ingredient_statement");
                 Log.i(TAG, "Nutrition List: " + strNutrList);
                 theNutrList = strNutrList;
+                String strItemName = jsonObject.getString("item_name");
+                Log.i(TAG, "Item Name: " + strItemName);
+                theItemName = strItemName;
                 return true;
             } catch (JSONException e) {
                 Log.e(TAG, "Error with JSON: ", e);
