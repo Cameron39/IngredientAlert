@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     }
  **/
 
-    public void doScan(View view) {
+    public void doScan() {
         Log.i(TAG + "doScanSearch", "starting");
         String newUPC = "";
         //ONION UPC:    041500220208 - french's french fried onions
@@ -205,14 +205,19 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG + "doScanSearch", "Done with " + newUPC);
     }
 
-    public void doSearch(View view) {
-        theUPC = "49000036756";
+    public void doSearch() {
+        //theUPC = "49000036756";
         if (theUPC == null || theUPC == "") {
             searchResult.setText("No UPC to Lookup");
         } else {
             GetAPIData apiData = new GetAPIData(theUPC);
             apiData.execute();
         }
+    }
+
+    public void doScanSearch(View view){
+        doScan();
+        doSearch();
     }
 
     @Override

@@ -67,4 +67,13 @@
         android:layout_below="@+id/searchResult"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="11dp" />
+
+    <Button
+        android:text="Scan and Search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchResult"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btnScanSearch"
+        android:onClick="doScanSearch"/>
 </RelativeLayout>
