@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Uri imgDetect;
     private String theUPC = "";
     private IntentIntegrator integrator;
+    private Boolean blDoScan = Boolean.FALSE;
     private static final String TAG = "Main";
     //private static final int Req_Write_Permissions = 20;
     //private static final int Req_Take_Photo = 10;
@@ -205,8 +206,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doSearch(View view) {
-        //theUPC = scanResult.getText().toString();
-        theUPC = "49000036756";
+        theUPC = scanResult.getText().toString();
+        //theUPC = "49000036756";
         if (theUPC == null || theUPC == "") {
             searchResult.setText("No UPC to Lookup >" + theUPC + "<");
         } else {
@@ -216,8 +217,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doScanSearch(View view){
+        blDoScan = Boolean.TRUE;
         doScan(view);
-        doSearch(view);
+        //doSearch(view);
     }
 
     @Override
@@ -233,7 +235,11 @@ public class MainActivity extends AppCompatActivity {
                 scanResult.setText(result.getContents());
                 Log.i(TAG, "Scan Results: " + result.getContents());
                 theUPC = result.getContents();
-                theUPC = "00001";
+                if(blDoScan = Boolean.TRUE){
+                    GetAPIData apiData = new GetAPIData(result.getContents());
+                    apiData.execute();
+                }
+                //theUPC = "00001";
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
