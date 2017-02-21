@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     }
  **/
 
-    public void doScan() {
+    public void doScan(View view) {
         Log.i(TAG + "doScanSearch", "starting");
         String newUPC = "";
         //ONION UPC:    041500220208 - french's french fried onions
@@ -188,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         //Cherry Coke: 49000036756
 
         //TODO: initialize and setup the barcode scanner
-        scanResult.setText("Starting Scan");
         integrator = new IntentIntegrator(this);
         integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -205,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG + "doScanSearch", "Done with " + newUPC);
     }
 
-    public void doSearch() {
-        //theUPC = "49000036756";
+    public void doSearch(View view) {
+        theUPC = scanResult.getText().toString();
         if (theUPC == null || theUPC == "") {
-            searchResult.setText("No UPC to Lookup");
+            searchResult.setText("No UPC to Lookup >" + theUPC + "<");
         } else {
             GetAPIData apiData = new GetAPIData(theUPC);
             apiData.execute();
@@ -216,8 +215,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doScanSearch(View view){
-        doScan();
-        doSearch();
+        doScan(view);
+        //doSearch();
     }
 
     @Override
@@ -230,9 +229,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "Cancelled");
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                scanResult.setText(result.getContents().toString());
-                Log.i(TAG, "Scan Results: " + result.getContents().toString());
-                theUPC = result.getContents().toString();
+                scanResult.setText(result.getContents());
+                Log.i(TAG, "Scan Results: " + result.getContents());
+                theUPC = result.getContents();
+                theUPC = "00001";
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

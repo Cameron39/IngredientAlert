@@ -49,14 +49,23 @@
         android:layout_centerHorizontal="true" />
 
     <Button
+        android:text="Scan n Search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchResult"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btnScanSearch"
+        android:onClick="doScanSearch"/>
+
+    <Button
         android:text="Scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scanButton"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="21dp"
+        android:onClick="doScan"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:onClick="doScan" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="Search"
@@ -65,15 +74,5 @@
         android:id="@+id/searchButton"
         android:onClick="doSearch"
         android:layout_below="@+id/searchResult"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="11dp" />
-
-    <Button
-        android:text="Scan and Search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchResult"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/btnScanSearch"
-        android:onClick="doScanSearch"/>
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
