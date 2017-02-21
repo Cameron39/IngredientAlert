@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
     public void doScan(View view) {
         Log.i(TAG + "doScanSearch", "starting");
         String newUPC = "";
+        blDoScan = Boolean.FALSE;
         //ONION UPC:    041500220208 - french's french fried onions
         //NO ONION UPC: 070640034086
         //Cherry Coke: 49000036756
@@ -235,10 +236,11 @@ public class MainActivity extends AppCompatActivity {
                 scanResult.setText(result.getContents());
                 Log.i(TAG, "Scan Results: " + result.getContents());
                 theUPC = result.getContents();
-                if(blDoScan = Boolean.TRUE){
-                    GetAPIData apiData = new GetAPIData(result.getContents());
-                    apiData.execute();
-                }
+                startActivity(new Intent(Intent.ACTION_VIEW));
+                    searchResult.setText("It thinks it is true");
+                    //GetAPIData apiData = new GetAPIData(result.getContents());
+                    //apiData.execute();
+
                 //theUPC = "00001";
             }
         } else {
