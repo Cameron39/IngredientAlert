@@ -1,25 +1,29 @@
 package com.example.cpitcel.ingredientalert;
 
-import android.Manifest;
-import android.content.Context;
+//import android.Manifest;
+//import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+//import android.content.pm.PackageManager;
+//import android.graphics.Bitmap;
+//import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+//import android.os.Environment;
+//import android.provider.MediaStore;
+//import android.support.annotation.NonNull;
+//import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.SparseArray;
+//import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import org.json.*;
 
 import java.io.BufferedReader;
@@ -29,18 +33,21 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+//import com.google.android.gms.vision.Frame;
+//import com.google.android.gms.vision.barcode.Barcode;
+//import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 public class MainActivity extends AppCompatActivity {
     private TextView scanResult;
     private TextView searchResult;
-    private BarcodeDetector detector;
+   // private BarcodeDetector detector;
     private Uri imgDetect;
     private String theUPC = "";
-    private static final int Req_Write_Permissions = 20;
-    private static final int Req_Take_Photo = 10;
+    private IntentIntegrator integrator;
+    private Boolean blDoScan = Boolean.FALSE;
+    private static final String TAG = "Main";
+    //private static final int Req_Write_Permissions = 20;
+    //private static final int Req_Take_Photo = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,21 +64,18 @@ public class MainActivity extends AppCompatActivity {
             scanResult.setText(savedInstanceState.getString("result"));
         }
 
-        ScanButton.setOnClickListener(new View.OnClickListener(){
-            @Override
+        /**ScanButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Req_Write_Permissions);
             }
-
         });
-        /**
+
          SearchButton.setOnClickListener(new View.OnClickListener(){
-        @Override
         public void onClick(View v) {
         getSearch(v);
         }
-        });**/
+        });
 
         detector = new BarcodeDetector.Builder(getApplicationContext())
                 .setBarcodeFormats(Barcode.UPC_A | Barcode.UPC_E)
@@ -79,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
         if (!detector.isOperational()) {
             scanResult.setText("Could not setup detector");
             return;
-        }
+        }*/
     }
-
+/**
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (imgDetect != null) {
@@ -175,6 +179,76 @@ public class MainActivity extends AppCompatActivity {
         apiData.execute();
         Log.i("MA.getSearchandResults", "Done with " + newUPC);
     }
+ **/
+
+    public void doScan(View view) {
+        Log.i(TAG + "doScanSearch", "starting");
+        String newUPC = "";
+        blDoScan = Boolean.FALSE;
+        //ONION UPC:    041500220208 - french's french fried onions
+        //NO ONION UPC: 070640034086
+        //Cherry Coke: 49000036756
+
+        //TODO: initialize and setup the barcode scanner
+        integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setPrompt("Scan a Barcode");
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(false);
+        integrator.setCameraId(0);
+        integrator.initiateScan();
+
+        //Lookup the Data part
+        Log.i(TAG + "doScanSearch", "Done scan, start search");
+        //GetAPIData apiData = new GetAPIData(newUPC);
+        //apiData.execute();
+        Log.i(TAG + "doScanSearch", "Done with " + newUPC);
+    }
+
+    public void doSearch(View view) {
+        theUPC = scanResult.getText().toString();
+        //theUPC = "49000036756";
+        if (theUPC == null || theUPC == "") {
+            searchResult.setText("No UPC to Lookup >" + theUPC + "<");
+        } else {
+            GetAPIData apiData = new GetAPIData(theUPC);
+            apiData.execute();
+        }
+    }
+
+    public void doScanSearch(View view){
+        blDoScan = Boolean.TRUE;
+        doScan(view);
+        //doSearch(view);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                scanResult.setText("Cancelled");
+                Log.i(TAG, "Cancelled");
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                scanResult.setText(result.getContents());
+                Log.i(TAG, "Scan Results: " + result.getContents());
+                theUPC = result.getContents();
+                startActivity(new Intent(Intent.ACTION_VIEW));
+                    searchResult.setText("It thinks it is true");
+                    //GetAPIData apiData = new GetAPIData(result.getContents());
+                    //apiData.execute();
+
+                //theUPC = "00001";
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.i(TAG, "No Scan Results");
+            Toast.makeText(this, "No Results", Toast.LENGTH_LONG).show();
+        }
+    }
 
     private class GetAPIData extends AsyncTask<Void, Void, String> {
         private String TAG = "GetAPIData";
@@ -182,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
         private String theBarcode = "";
         //private String theNDBNO = "";
         private String theNutrList = "";
+        private String theItemName = "";
         private String deathBy = "ONION";
         private boolean hasDeath = false;
         private boolean hasNoData = false;
@@ -279,6 +354,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Execution Ended with result: " + response.toString());
             theResult = response.toString();
             searchResult.setText(response.toString());
+            scanResult.setText(theItemName);
 
         }
 
@@ -331,6 +407,9 @@ public class MainActivity extends AppCompatActivity {
                 String strNutrList = jsonObject.getString("nf_ingredient_statement");
                 Log.i(TAG, "Nutrition List: " + strNutrList);
                 theNutrList = strNutrList;
+                String strItemName = jsonObject.getString("item_name");
+                Log.i(TAG, "Item Name: " + strItemName);
+                theItemName = strItemName;
                 return true;
             } catch (JSONException e) {
                 Log.e(TAG, "Error with JSON: ", e);
