@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">IngredientAlert</string>
+    <string name="scanresult">Scan Result</string>
+    <string name="upcresult">UPC Result</string>
+    <string name="searchresult">Search Result</string>
+    <string name="futuresearchresult">Future Search Result</string>
+    <string name="scan">Scan</string>
+    <string name="both">Both</string>
+    <string name="search">Search</string>
 </resources>
