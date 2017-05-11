@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button ScanButton = (Button) findViewById(R.id.scanButton);
-        Button SearchButton = (Button) findViewById(R.id.searchButton);
+        //Button ScanButton = (Button) findViewById(R.id.scanButton);
+        //Button SearchButton = (Button) findViewById(R.id.searchButton);
         scanResult = (TextView) findViewById(R.id.result);
         searchResult = (TextView) findViewById(R.id.searchResult);
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             scanResult.setText(savedInstanceState.getString("result"));
         }
 
-        /**ScanButton.setOnClickListener(new View.OnClickListener(){
+        /*ScanButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Req_Write_Permissions);
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
     public void doSearch(View view) {
         theUPC = scanResult.getText().toString();
         //theUPC = "49000036756";
-        if (theUPC == null || theUPC == "") {
+        if (theUPC.equals("")) {
             searchResult.setText("No UPC to Lookup >" + theUPC + "<");
         } else {
             GetAPIData apiData = new GetAPIData(theUPC);
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         if(result != null) {
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-                scanResult.setText("Cancelled");
+                scanResult.setText(R.string.cancelled);
                 Log.i(TAG, "Cancelled");
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "Scan Results: " + result.getContents());
                 theUPC = result.getContents();
                 startActivity(new Intent(Intent.ACTION_VIEW));
-                    searchResult.setText("It thinks it is true");
+                    searchResult.setText(R.string.itthinksitistrue);
                     //GetAPIData apiData = new GetAPIData(result.getContents());
                     //apiData.execute();
 
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         //private final static String URL2P1 = "https://api.nal.usda.gov/ndb/reports/?ndbno=";
         //private final static String URL2P3 = "&type=f&format=json&api_key=";
 
-        public GetAPIData(String newBarcode){theBarcode = newBarcode;}
+        private GetAPIData(String newBarcode){theBarcode = newBarcode;}
 
         private String GetSearchURL(){
             return URLP1 + theBarcode + URLP3 + theAppID + URLP5 + theAPI_KEY;
@@ -285,16 +285,16 @@ public class MainActivity extends AppCompatActivity {
         public String GetResult(){return theResult;}
 
         protected void onPreExecute(){
-            //Log.i("GetAPIData.onPreExecute", "Starting Exectution with URL: " + theURL);
-            searchResult.setText("Getting Data...");
+            //Log.i("GetAPIData.onPreExecute", "Starting Execution with URL: " + theURL);
+            searchResult.setText(R.string.gettingdata);
         }
 
         @Override
         protected String doInBackground(Void... params) {
             String theURL = GetSearchURL();
-            String theSearchResult = "";
+            String theSearchResult;
             String theNutrResult = "";
-            if (theURL == "") {
+            if (theURL.equals("")) {
                 Log.i(TAG, "NO URL, exiting");
                 return "No URL";
             }
@@ -351,9 +351,9 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(String response){
             super.onPostExecute(response);
-            Log.i(TAG, "Execution Ended with result: " + response.toString());
-            theResult = response.toString();
-            searchResult.setText(response.toString());
+            Log.i(TAG, "Execution Ended with result: " + response);
+            theResult = response;
+            searchResult.setText(response);
             scanResult.setText(theItemName);
 
         }

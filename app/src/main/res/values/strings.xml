@@ -7,4 +7,7 @@
     <string name="scan">Scan</string>
     <string name="both">Both</string>
     <string name="search">Search</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="itthinksitistrue">It thinks it is true</string>
+    <string name="gettingdata">Getting Data&#8230;</string>
 </resources>
