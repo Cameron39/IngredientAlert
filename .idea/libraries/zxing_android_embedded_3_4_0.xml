@@ -1,12 +1,10 @@
 <component name="libraryTable">
   <library name="zxing-android-embedded-3.4.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/97fd7c5bcd347ee349749b4d47abb0fe1ae2b862/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/97fd7c5bcd347ee349749b4d47abb0fe1ae2b862/output/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.4.0.aar/594f493ab750eeb5c6721b5ed37264e0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.4.0.aar/594f493ab750eeb5c6721b5ed37264e0/res" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.journeyapps/zxing-android-embedded/3.4.0/fbd59f49a0e7044be9751bc108ceec3c65aed849/zxing-android-embedded-3.4.0-sources.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

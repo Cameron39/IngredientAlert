@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         theUPC = scanResult.getText().toString();
         //theUPC = "49000036756";
         if (theUPC.equals("")) {
-            searchResult.setText("No UPC to Lookup >" + theUPC + "<");
+            searchResult.setText("No UPC to Lookup");
         } else {
             GetAPIData apiData = new GetAPIData(theUPC);
             apiData.execute();
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
     public void doScanSearch(View view){
         blDoScan = Boolean.TRUE;
         doScan(view);
-        //doSearch(view);
+        doSearch(view);
     }
 
     @Override
@@ -237,9 +237,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "Scan Results: " + result.getContents());
                 theUPC = result.getContents();
                 startActivity(new Intent(Intent.ACTION_VIEW));
-                    searchResult.setText(R.string.itthinksitistrue);
-                    //GetAPIData apiData = new GetAPIData(result.getContents());
-                    //apiData.execute();
+                    //searchResult.setText(R.string.itthinksitistrue);
+                    GetAPIData apiData = new GetAPIData(result.getContents());
+                    apiData.execute();
 
                 //theUPC = "00001";
             }
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         private String deathBy = "ONION";
         private boolean hasDeath = false;
         private boolean hasNoData = false;
-        //URL = P1 + Barcode + P3 + APPID + P5 + API_KEY
+
         private final static String URLP1 = "https://api.nutritionix.com/v1_1/item?upc=";
         private final static String URLP3 = "&appId=";
         private final static String theAppID = BuildConfig.theAppID;
